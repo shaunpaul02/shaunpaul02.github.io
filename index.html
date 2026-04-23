@@ -2,37 +2,135 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-width=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shaun Paul - Portfolio</title>
     <style>
-        /* Minimalist CSS to mirror the reference site */
+        /* CSS Variables for Light/Dark Mode Theming */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --heading-color: #111111;
+            --border-color: #eeeeee;
+            --nav-link: #555555;
+            --nav-hover: #000000;
+            --accent-bg: #f5f5f5;
+            --tag-bg: #eeeeee;
+            --tag-text: #444444;
+            --link-color: #0066cc;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #cccccc;
+            --heading-color: #ffffff;
+            --border-color: #333333;
+            --nav-link: #aaaaaa;
+            --nav-hover: #ffffff;
+            --accent-bg: #1e1e1e;
+            --tag-bg: #2a2a2a;
+            --tag-text: #dddddd;
+            --link-color: #4da6ff;
+        }
+
+        /* Base Styles */
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 2rem; 
+            line-height: 1.6; 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 2rem; 
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+        
+        h1, h2, h3 { color: var(--heading-color); transition: color 0.3s ease;}
+        
         header { 
-            display: flex; justify-content: space-between; align-items: baseline; 
-            margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 1rem; 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; 
         }
-        nav a { margin-left: 1.5rem; text-decoration: none; color: #555; font-weight: 500; }
-        nav a:hover { color: #000; }
-        h1, h2, h3 { color: #111; }
+        
+        nav { display: flex; align-items: center; gap: 1.5rem; }
+        nav a { text-decoration: none; color: var(--nav-link); font-weight: 500; transition: color 0.2s;}
+        nav a:hover { color: var(--nav-hover); }
+        
+        /* Theme Toggle Button */
+        #theme-toggle {
+            background: var(--accent-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        #theme-toggle:hover { filter: brightness(1.1); }
+
+        /* Intro Section */
         .intro { display: flex; gap: 2rem; align-items: center; margin-bottom: 3rem; }
-        .intro img { border-radius: 50%; width: 160px; height: 160px; object-fit: cover; }
+        .intro img { border-radius: 50%; width: 160px; height: 160px; object-fit: cover; border: 2px solid var(--border-color);}
         .social-links { margin-bottom: 1rem; }
-        .social-links a { margin-right: 1rem; text-decoration: none; color: #0066cc; font-weight: 500; }
+        .social-links a { margin-right: 1rem; text-decoration: none; color: var(--link-color); font-weight: 500; }
         .social-links a:hover { text-decoration: underline; }
-        .project { margin-bottom: 2rem; }
-        .project-title { font-weight: bold; font-size: 1.2rem; margin-bottom: 0.2rem; }
-        .tags { font-size: 0.8rem; color: #666; margin-top: 0.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
-        .tag { background: #eee; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: 500;}
-        .resume-item { margin-bottom: 1.5rem; }
-        .resume-date { font-size: 0.9rem; color: #777; font-weight: 500; }
+        
+        /* Interactive Project Accordions */
+        details {
+            background: var(--accent-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        
+        summary {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--heading-color);
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            list-style: none; /* Removes default arrow */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        summary::-webkit-details-marker { display: none; } /* Removes arrow in Safari */
+        
+        summary::after {
+            content: '+';
+            font-size: 1.5rem;
+            font-weight: normal;
+            transition: transform 0.2s;
+        }
+        
+        details[open] summary::after {
+            content: '−';
+        }
+        
+        .project-content {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+        }
+        
+        .project-img { width: 100%; max-height: 350px; object-fit: cover; border-radius: 6px; margin-bottom: 1rem; }
+        
+        .tags { font-size: 0.8rem; margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .tag { background: var(--tag-bg); color: var(--tag-text); padding: 0.3rem 0.7rem; border-radius: 4px; font-weight: 500;}
+        
+        /* Resume Section */
+        .resume-item { margin-bottom: 1.5rem; padding-left: 1rem; border-left: 2px solid var(--border-color); }
+        .resume-title { font-weight: bold; color: var(--heading-color); }
+        .resume-date { font-size: 0.9rem; color: var(--nav-link); font-weight: 500; margin-bottom: 0.2rem; }
         
         @media (max-width: 600px) {
             .intro { flex-direction: column; text-align: center; }
             header { flex-direction: column; align-items: center; gap: 1rem; }
-            nav a { margin: 0 0.5rem; }
+            nav { flex-wrap: wrap; justify-content: center; }
         }
     </style>
 </head>
@@ -44,6 +142,7 @@
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
         <a href="#resume">Résumé</a>
+        <button id="theme-toggle">Dark Mode</button>
     </nav>
 </header>
 
@@ -54,68 +153,113 @@
     <div>
         <h1>Hi, I'm Shaun!</h1>
         <div class="social-links">
-            <a href="#">GitHub</a>
-            <a href="#">LinkedIn</a>
-            <a href="#">Email</a>
+            <a href="https://github.com/shaunpaul02" target="_blank">GitHub</a>
+            <a href="https://www.linkedin.com/in/shaun-paul-06474a1b6/" target="_blank">LinkedIn</a>
+            <a href="mailto:shaunpaulr@hotmail.com">Email</a>
         </div>
-        <p>I'm an engineer specializing in industrial automation and artificial intelligence. I have deep experience with control systems like Siemens, Allen-Bradley, and Beckhoff, and I'm highly focused on building the bridge between modern manufacturing and AI.</p>
-        <p>Currently, I'm developing <strong>Talon</strong>—a wearable 3D mouse glove for CAD modeling and gaming—and preparing for a Master's in AI. When I'm away from the keyboard, I'm usually focused on vertical jump training or producing indie pop music.</p>
+        <p>I'm a Mechatronics and Biomedical Engineer specializing in industrial automation, machine vision, and hardware systems. I have deep experience with control systems like Allen-Bradley and Mitsubishi, and I'm highly focused on building the bridge between modern high-speed manufacturing and AI.</p>
+        <p>Currently, I'm developing <strong>Talon</strong>—a wearable 3D spatial control glove. When I'm away from the keyboard or the shop floor, I'm usually focused on vertical jump training for basketball and volleyball, or producing indie pop music.</p>
     </div>
 </section>
 
 <section id="projects">
-    <h2>Projects & Hardware</h2>
+    <h2>Select Projects</h2>
     
-    <div class="project">
-        <div class="project-title">Talon: Wearable 3D Mouse Glove</div>
-        <p>A custom-built wearable device utilizing Arduino microcontrollers and specialized sensors to fluidly control CAD environments and gaming interfaces.</p>
-        <div class="tags">
-            <span class="tag">Hardware Design</span>
-            <span class="tag">Arduino</span>
-            <span class="tag">Sensor Integration</span>
+    <details>
+        <summary>AI-Driven Vision Inspection & Quality Architecture</summary>
+        <div class="project-content">
+            <img src="honda-vision.jpg" alt="Honda Vision Project" class="project-img">
+            <p>Engineered and deployed an end-to-end automated vision inspection system using Keyence VS AI cameras to monitor critical engine head surfaces on a high-speed production line. Integrated the camera directly into the existing Allen-Bradley/Mitsubishi PLC step sequence for real-time process monitoring. Developed the complete automated reject loop, configuring the safety interlocks and programming the Fanuc/Motoman robotics to instantly remove and isolate flawed units. Built a custom HMI for line operators to monitor camera feeds and mapped the inspection data and images to a central database for traceability.</p>
+            <p><strong>Impact:</strong> Reduced critical defect escape rates to near zero, catching surface anomalies within a 3-4 unit window. This prevented an estimated 10,000+ potential engine recalls, saving millions in rework and warranty liabilities while maintaining line throughput.</p>
+            <div class="tags">
+                <span class="tag">Machine Vision (Keyence)</span>
+                <span class="tag">PLC Integration</span>
+                <span class="tag">Fanuc/Motoman Robotics</span>
+                <span class="tag">HMI / Database</span>
+            </div>
         </div>
-    </div>
+    </details>
 
-    <div class="project">
-        <div class="project-title">AI-Driven Local Job Matcher</div>
-        <p>An application architecture designed to intelligently match individuals with local employment opportunities based on detailed strength assessments.</p>
-        <div class="tags">
-            <span class="tag">AI / ML</span>
-            <span class="tag">Software Architecture</span>
+    <details>
+        <summary>End-to-End HVAC Product Lifecycle & Production Line</summary>
+        <div class="project-content">
+            <img src="unilux-coil.jpg" alt="Unilux HVAC Project" class="project-img">
+            <p>Led the complete lifecycle design of a new horizontal fan coil unit, balancing product specifications, process requirements, and layout complexity. Executed all mechanical design, including heat coil and blower specification, prototyping, and generating CNC code for manufacturing. On the electrical side, designed the custom PCB architecture to interface with the core control systems. Beyond the product itself, engineered the manufacturing floor plan and assembly line layout, establishing SOPs, material flow, and tooling requirements to take the unit from prototype to full-scale certified production.</p>
+            <div class="tags">
+                <span class="tag">Mechanical Design (CAD)</span>
+                <span class="tag">PCB Design</span>
+                <span class="tag">Design for Manufacturing</span>
+                <span class="tag">Production Layout</span>
+            </div>
         </div>
-    </div>
+    </details>
 
-    <div class="project">
-        <div class="project-title">PLC Logic Conversion & Simulation</div>
-        <p>Developed workflows and translation tools for migrating and simulating logic seamlessly across major industrial PLC platforms.</p>
-        <div class="tags">
-            <span class="tag">Industrial Automation</span>
-            <span class="tag">Siemens</span>
-            <span class="tag">Allen-Bradley</span>
-            <span class="tag">Beckhoff</span>
+    <details>
+        <summary>Talon: Spatial 3D Control Wearable</summary>
+        <div class="project-content">
+            <img src="talon-glove.jpg" alt="Talon Project Prototype" class="project-img">
+            <p>Architected a custom 3D control interface designed to bridge the gap between human kinematics and digital 3D space. Developed a wearable glove that utilizes an array of flex sensors, accelerometers, and potentiometers to track precise finger angles, arm rotation, and acceleration. Engineered the sensor fusion logic to translate physical movement into fluid, 3-dimensional inputs for CAD modeling, simulation environments, and gaming. This system dramatically improves precision and reduces the friction of interacting with complex 3D models compared to traditional 2D peripherals.</p>
+            <div class="tags">
+                <span class="tag">Sensor Integration</span>
+                <span class="tag">Kinematics</span>
+                <span class="tag">Hardware Prototyping</span>
+                <span class="tag">C++ / Microcontrollers</span>
+            </div>
         </div>
-    </div>
+    </details>
 </section>
 
 <section id="resume">
     <h2>Résumé</h2>
     
     <div class="resume-item">
-        <div class="project-title">Industrial Automation Engineer</div>
-        <div class="resume-date">Current</div>
-        <p>Focusing on the deployment, troubleshooting, and optimization of industrial control systems, targeting roles at companies pioneering advanced manufacturing like Tesla.</p>
+        <div class="resume-title">Mechatronics Engineer Intern</div>
+        <div class="resume-date">Honda of Canada Mfg. | May 2023 - Sep 2024</div>
+        <p>Developed PLC programming changes to improve step sequence efficiency, integrated vision systems (Keyence/Cognex) with machine safety interlocks, and programmed Fanuc/Motoman robotics.</p>
+    </div>
+
+    <div class="resume-item">
+        <div class="resume-title">Electro-Mechanical Engineer</div>
+        <div class="resume-date">Unilux VFC | May 2021 - Sep 2021</div>
+        <p>Developed new products in SolidWorks/AutoCAD, designed PCB architectures, and established manufacturing SOPs and production line layouts for full-scale unit builds.</p>
     </div>
     
     <div class="resume-item">
-        <div class="project-title">Master's Preparation in AI</div>
-        <div class="resume-date">Current</div>
-        <p>Executing a rigorous self-study protocol in neural networks, computer vision, and advanced mathematics to prepare for graduate-level research.</p>
+        <div class="resume-title">Mechatronic Systems and Biomedical Engineering</div>
+        <div class="resume-date">Western University</div>
+        <p>Advanced coursework and hands-on engineering applications bridging the gap between mechanical systems, electronics, and biological software controls.</p>
     </div>
 </section>
 
 <footer>
-    <p style="text-align: center; color: #777; margin-top: 4rem; font-size: 0.9rem;">Built from scratch for GitHub Pages.</p>
+    <p style="text-align: center; color: var(--nav-link); margin-top: 4rem; font-size: 0.9rem;">Built from scratch.</p>
 </footer>
+
+<script>
+    // Theme Toggle Logic
+    const toggleButton = document.getElementById('theme-toggle');
+    const currentTheme = localStorage.getItem('theme');
+
+    // Check saved theme on load
+    if (currentTheme === 'dark') {
+        document.body.setAttribute('data-theme', 'dark');
+        toggleButton.textContent = 'Light Mode';
+    }
+
+    // Toggle theme on click
+    toggleButton.addEventListener('click', () => {
+        let theme = document.body.getAttribute('data-theme');
+        if (theme === 'dark') {
+            document.body.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+            toggleButton.textContent = 'Dark Mode';
+        } else {
+            document.body.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            toggleButton.textContent = 'Light Mode';
+        }
+    });
+</script>
 
 </body>
 </html>

@@ -117,7 +117,8 @@
             padding-top: 1rem;
         }
         
-        .project-img { width: 100%; max-height: 350px; object-fit: cover; border-radius: 6px; margin-bottom: 1rem; }
+        /* THIS IS THE FIX: Changed height to auto and removed object-fit cover to stop cropping */
+        .project-img { width: 100%; height: auto; border-radius: 6px; margin-bottom: 1rem; }
         
         .tags { font-size: 0.8rem; margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
         .tag { background: var(--tag-bg); color: var(--tag-text); padding: 0.3rem 0.7rem; border-radius: 4px; font-weight: 500;}
